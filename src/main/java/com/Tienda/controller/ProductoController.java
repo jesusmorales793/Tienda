@@ -5,7 +5,9 @@
 package com.Tienda.controller;
 
 import com.Tienda.domain.Categoria;
+import com.Tienda.domain.Producto;
 import com.Tienda.service.CategoriaService;
+import com.Tienda.service.ProductoService;
 import com.Tienda.service.impl.FirebaseStorageServiceImpl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Controller
 //  @Slf4j  Este sirve para poder encontrar los log de cuando estoy corriendolo y sirve como para debuggear o saber si se hizo el proceso
-@RequestMapping("/categoria")
-public class CategoriaController {
+@RequestMapping("/producto")
+public class ProductoController {
+
+    @Autowired
+    ProductoService productoService;
 
     @Autowired
     CategoriaService categoriaService;
@@ -29,47 +33,50 @@ public class CategoriaController {
     @Autowired
     private FirebaseStorageServiceImpl firebaseStorageService;
 
-    //Este metodo lo que hace es que le pide a categoriaService que le traiga la info de categoria y que lo pueda mostrar en pantalla
     @GetMapping("/listado")
     public String inicio(Model model) {
-        //Es la variable lista que uso para traerme los datos de las categorias de la vara de datos y se pone "false" para que me traiga todos
-        List<Categoria> categorias = categoriaService.getCategorias(false);
-        //nombre que le quise poner|| llama a la variable categoria de arriba
+
+        List<Producto> productos = productoService.getProductos(false);
+        List<Categoria> categorias = categoriaService.getCategorias(true);
+
         model.addAttribute("categorias", categorias);
-        model.addAttribute("totalCategorias", categorias.size());
-        return "/categoria/listado";
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        return "/producto/listado";
+
     }
 
     @GetMapping("/nuevo")
-    public String categoriaNuevo(Categoria categoria) {
-        return "/categoria/modifica";
+    public String productoNuevo(Producto producto) {
+        return "/producto/modifica";
     }
 
     @PostMapping("/guardar")
-    public String categoriaGuardar(Categoria categoria,
+    public String productoGuardar(Producto producto,
             @RequestParam("imagenFile") MultipartFile imagenFile) {
         if (!imagenFile.isEmpty()) {
-            categoriaService.save(categoria);
-            categoria.setRutaImagen(
+            productoService.save(producto);
+            producto.setRutaImagen(
                     firebaseStorageService.cargaImagen(
                             imagenFile,
-                            "categoria",
-                            categoria.getIdCategoria()));
+                            "producto",
+                            producto.getIdProducto()));
         }
-        categoriaService.save(categoria);
-        return "redirect:/categoria/listado";
+        productoService.save(producto);
+        return "redirect:/producto/listado";
     }
 
-    @GetMapping("/eliminar/{idCategoria}")
-    public String categoriaEliminar(Categoria categoria) {
-        categoriaService.delete(categoria);
-        return "redirect:/categoria/listado";
+    @GetMapping("/eliminar/{idProducto}")
+    public String productoEliminar(Producto producto) {
+        productoService.delete(producto);
+        return "redirect:/producto/listado";
     }
 
-    @GetMapping("/modificar/{idCategoria}")
-    public String categoriaModificar(Categoria categoria, Model model) {
-        categoria = categoriaService.getCategoria(categoria);
-        model.addAttribute("categoria", categoria);
-        return "/categoria/modifica";
+    @GetMapping("/modificar/{idProducto}")
+    public String productoModificar(Producto producto, Model model) {
+        producto = productoService.getProducto(producto);
+        List<Categoria> categorias = categoriaService.getCategorias(true);
+        model.addAttribute("producto", producto);
+        return "/producto/modifica";
     }
 }
