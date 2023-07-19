@@ -6,6 +6,8 @@ package com.Tienda.service;
 
 import com.Tienda.domain.Producto;
 import java.util.List;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ProductoService {
 
@@ -23,5 +25,15 @@ public interface ProductoService {
 
     // Se elimina el producto que tiene el id pasado por parámetro
     public void delete(Producto producto);
+
+    // Lista de productos con precio entre ordendados por descripción ConsultaAmpliada
+    public List<Producto> findByPrecioBetweenOrderByDescripcion(double precioInf, double precioSup);
+
+    //Ejemplo de método utilizando Consultas con JPQL
+    @Query(value = "SELECT a FROM Producto a where a.precio BETWEEN :precioInf AND :precioSup ORDER BY a.descripcion ASC")
+    public List<Producto> metodoJPQL(@Param("precioInf") double precioInf, @Param("precioSup") double precioSup);
+
+    //Lista de productos utilizando consultas con SQL Nativo
+    public List<Producto> metodoNativo(double precioInf, double precioSup);
 
 }

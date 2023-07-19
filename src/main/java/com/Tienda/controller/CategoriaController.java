@@ -34,6 +34,7 @@ public class CategoriaController {
     public String inicio(Model model) {
         //Es la variable lista que uso para traerme los datos de las categorias de la vara de datos y se pone "false" para que me traiga todos
         List<Categoria> categorias = categoriaService.getCategorias(false);
+        //List<Categoria> categorias = categoriaService.getPorDescripicion("Teclados");   >> El como se aplica el metodo de DAO para encontrar por algo especifico String en este caso
         //nombre que le quise poner|| llama a la variable categoria de arriba
         model.addAttribute("categorias", categorias);
         model.addAttribute("totalCategorias", categorias.size());
