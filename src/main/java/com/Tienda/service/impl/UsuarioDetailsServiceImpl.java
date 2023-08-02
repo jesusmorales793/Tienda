@@ -25,7 +25,7 @@ public class UsuarioDetailsServiceImpl implements UsuarioDetailsService, UserDet
     /*Este es de la interfaz de service*//*Este es de los "users* en "ProjectoConfig"*/
 
     @Autowired
-    private UsuarioDao usuarioDato;
+    private UsuarioDao usuarioDao;
 
     @Autowired
     private HttpSession session;

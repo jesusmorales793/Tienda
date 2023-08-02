@@ -47,11 +47,11 @@
                                 </ul>
                             </li>
                         </ul> 
-                        <ul class="navbar-nav" sec:authorized="!isAuthenticated()">
+                        <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
                             <li class="nav-item text-white my-auto">
                                 <a class="nav-link" th:href="@{/login}"><i class="fa fa-sign-in-alt"></i></a>
                         </ul>
-                        <ul class="navbar-nav" sec:authorized="isAuthenticated()">
+                        <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                             <li class="nav-item text-white my-auto" th:if="${avatar != null && avatar !=' '}">
                                 <img th:src="${avatar}" height="40" />
                             </li>

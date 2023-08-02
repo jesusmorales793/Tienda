@@ -7,8 +7,8 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 
-@Entity
 @Data
+@Entity
 @Table(name = "usuario")
 public class Usuario implements Serializable {
 
